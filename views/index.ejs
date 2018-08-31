@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GroupChat</title>
+	<link rel="stylesheet" type="text/css" href="/css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+    	$(document).ready(function(){
+    		//1
+    		var socket = io();
+
+    		socket.on('connection', function(data) {
+    			//Tests connection to socket.
+    			console.log(data.msg);
+    			//prompts the screen to ask the user for a username.
+    			let username = prompt("Please enter your username!");
+    			socket.emit("username_submit", username);
+    		})
+
+    		 socket.on('show_users', function(data) {
+                $("#users").html("");
+                for(let i = 0; i < data.length; i++) {
+                    $("#users").append("<li>" + data[i]["username"] + "</li>");
+                }
+            });
+
+    		 socket.on('show_messages', function(data) {
+                $("#messages").html("");
+                for(let i = 0; i < data.length; i++) {
+                    $("#messages").append("<li>" + data[i].user + " - " + data[i].message + "</li>");
+                }
+                
+            })
+
+    		 $("#submit").on("click", function(e){
+                e.preventDefault();
+                console.log($("#message").val());
+                let message = $("#message").val();
+                socket.emit('new_message', message);
+                $("#message").val("");
+            })
+
+
+    	});
+    	
+
+
+
+    </script>
+</head>
+<body>
+	
+    <ul id="users"></ul>
+    <center><h1>Conversation Board</h1></center>
+    <ul id="messages"></ul>
+    <center><input type="text" id="message">
+    <button id="submit">Send</button></center>
+
+</body>
+</html>

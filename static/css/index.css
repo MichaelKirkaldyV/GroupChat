@@ -1,0 +1,12 @@
+#container{
+	height: 900px;
+	width: 900px;
+}
+
+#add_chat_box{
+	width: 400px;
+	height: 300px;
+	border: 4px solid black;
+	border-radius: 10px;
+
+}
